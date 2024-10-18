@@ -1,4 +1,4 @@
-name: .NET CI 1
+name: .NET CI 2
 
 on:
   push:
