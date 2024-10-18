@@ -15,12 +15,12 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Publish
+      run: dotnet publish GitHubActionsTests/GitHubActionsTests.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: GitHubActionsTests
-        path: GitHubActionsTests/bin/Debug/net8.0/
+        path: ./publish
