@@ -1,4 +1,4 @@
-name: .NET CI 4
+name: .NET CI 3
 on:
   push:
     branches: [ "master" ]
@@ -24,8 +24,8 @@ jobs:
       with:
         name: GitHubActionsTests
         path: ./publish/*.exe
-    - name: Upload test.txt artifact
+    - name: Upload text file artifact
       uses: actions/upload-artifact@v3
       with:
-        name: TestResults
+        name: TestFile
         path: ./publish/test.txt
