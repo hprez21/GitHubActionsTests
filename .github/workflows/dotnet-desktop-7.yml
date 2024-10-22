@@ -1,0 +1,29 @@
+name: Custom Variables Demo
+on:
+  push:
+    branches:
+      - main
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    env:
+      GREETING: "¡Hola Mundo!"
+      APP_NAME: "Mi Aplicación"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Display Job-level Variables
+        run: |
+          echo "Mensaje: ${{ env.GREETING }}"
+          echo "Nombre de la App: ${{ env.APP_NAME }}"
+      
+      - name: Use Step-level Variable
+        env:
+          STEP_MESSAGE: "Esta es una variable a nivel de step"
+        run: |
+          echo "Mensaje del Step: ${{ env.STEP_MESSAGE }}"
+      
+      - name: Combine Variables
+        run: |
+          echo "${{ env.GREETING }} desde ${{ env.APP_NAME }}"
