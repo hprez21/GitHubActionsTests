@@ -1,0 +1,43 @@
+name: Context Variables Demo
+on: push
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    # Usando una variable de contexto en el nombre del job
+    name: Demo running on ${{ github.event_name }}
+    
+    # Agregando una condición usando una variable de contexto
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Usando variables de contexto en el name del step
+      - name: Running as ${{ github.actor }} on repository ${{ github.repository }}
+        run: echo "Hello from the action!"
+
+      # Usando variables de contexto para definir un output
+      - id: repo-info
+        name: Set repository info
+        run: echo "repo_full_path=${{ github.repository }}" >> $GITHUB_OUTPUT
+
+      # Ejemplo con environment
+      - name: Set environment based on branch
+        env:
+          ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+        run: echo "Running in $ENVIRONMENT environment"
+
+      # Usando variables de contexto en una matriz
+      strategy:
+        matrix:
+          node-version: [16, 18]
+          include:
+            - node-version: 16
+              registry-url: ${{ github.server_url }}/npm/proxy
+              
+      # Usando variables de contexto para definir permisos
+    permissions:
+      contents: read
+      issues: ${{ github.event_name == 'issues' && 'write' || 'read' }}
