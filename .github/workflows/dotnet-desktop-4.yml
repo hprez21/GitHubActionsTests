@@ -1,28 +1,40 @@
-name: Build and Create Text File
+name: Build and Upload txt File
 
-on: push
+on:
+  push:
+    branches:
+      - main  # Cambia esto a la rama donde quieras que se ejecute el workflow
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
+    # Descarga el código del repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Instala el SDK de .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'
-    
-    - name: Build
-      run: dotnet build GitHubActionsTests/GitHubActionsTests.csproj
-    
-    - name: Run application
-      run: dotnet run --project GitHubActionsTests/GitHubActionsTests.csproj --no-build
-    
-    - name: Upload text file artifact
+        dotnet-version: '7.x' # Cambia esto a la versión de .NET que estés usando
+
+    # Restaura dependencias de .NET (en caso de que haya)
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # Construye el proyecto
+    - name: Build the project
+      run: dotnet build --no-restore
+
+    # Ejecuta el programa para generar el archivo test.txt
+    - name: Run the console app
+      run: dotnet run
+
+    # Sube el archivo test.txt como un artefacto
+    - name: Upload test.txt artifact
       uses: actions/upload-artifact@v3
       with:
-        name: generated-text-file
-        path: GitHubActionsTests/bin/Debug/net8.0/test.txt
-        if-no-files-found: error
+        name: test-txt-file
+        path: test.txt
