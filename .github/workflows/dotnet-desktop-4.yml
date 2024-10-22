@@ -1,31 +1,43 @@
-name: Build and Upload txt File
+name: Build and Upload Artifact
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.x' # Cambia esto a la versión de .NET que estés usando
+      # Setup .NET Core SDK
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x' # Cambia la versión si es necesario
 
-    - name: Restore dependencies
-      run: dotnet restore GitHubActionsTests/GitHubActionsTests.csproj  # Ajusta la ruta si es necesario
+      # Restore dependencies (if any)
+      - name: Restore dependencies
+        run: dotnet restore ./GitHubActionsTests/GitHubActionsTests.csproj
 
-    - name: Build the project
-      run: dotnet build GitHubActionsTests/GitHubActionsTests.csproj --no-restore  # Ajusta la ruta si es necesario
+      # Build the project
+      - name: Build the project
+        run: dotnet build --no-restore ./GitHubActionsTests/GitHubActionsTests.csproj
 
-    - name: Run the console app
-      run: dotnet run --project GitHubActionsTests.csproj  # Ajusta la ruta si es necesario
+      # Run the project (this creates the test.txt file)
+      - name: Run the project
+        run: dotnet run --project ./GitHubActionsTests/GitHubActionsTests.csproj
 
-    - name: Upload test.txt artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-txt-file
-        path: MyApp/test.txt  # Ajusta la ruta si es necesario
+      # Upload the test.txt as an artifact
+      - name: Upload test.txt as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-file
+          path: ./GitHubActionsTests/test.txt
