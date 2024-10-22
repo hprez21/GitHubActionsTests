@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Usando variables de contexto en el name del step
       - name: Running as ${{ github.actor }} on repository ${{ github.repository }}
@@ -28,16 +28,3 @@ jobs:
         env:
           ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
         run: echo "Running in $ENVIRONMENT environment"
-
-      # Usando variables de contexto en una matriz
-      strategy:
-        matrix:
-          node-version: [16, 18]
-          include:
-            - node-version: 16
-              registry-url: ${{ github.server_url }}/npm/proxy
-              
-      # Usando variables de contexto para definir permisos
-    permissions:
-      contents: read
-      issues: ${{ github.event_name == 'issues' && 'write' || 'read' }}
