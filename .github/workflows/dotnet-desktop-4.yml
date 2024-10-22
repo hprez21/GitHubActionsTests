@@ -1,6 +1,11 @@
 name: Build and Create Text File
 
-on: push    
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,18 +19,15 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: Restore dependencies
-      run: dotnet restore
-    
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build GitHubActionsTests/GitHubActionsTests.csproj
     
     - name: Run application
-      run: dotnet run --no-build
+      run: dotnet run --project GitHubActionsTests/GitHubActionsTests.csproj --no-build
     
     - name: Upload text file artifact
       uses: actions/upload-artifact@v3
       with:
         name: generated-text-file
-        path: test.txt
+        path: GitHubActionsTests/test.txt
         if-no-files-found: error
