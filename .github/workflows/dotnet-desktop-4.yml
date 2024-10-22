@@ -16,13 +16,13 @@ jobs:
         dotnet-version: '7.x' # Cambia esto a la versión de .NET que estés usando
 
     - name: Restore dependencies
-      run: dotnet restore MyApp/MyApp.csproj  # Ajusta la ruta si es necesario
+      run: dotnet restore GitHubActionsTests/GitHubActionsTests.csproj  # Ajusta la ruta si es necesario
 
     - name: Build the project
-      run: dotnet build MyApp/MyApp.csproj --no-restore  # Ajusta la ruta si es necesario
+      run: dotnet build GitHubActionsTests/GitHubActionsTests.csproj --no-restore  # Ajusta la ruta si es necesario
 
     - name: Run the console app
-      run: dotnet run --project MyApp/MyApp.csproj  # Ajusta la ruta si es necesario
+      run: dotnet run --project GitHubActionsTests.csproj  # Ajusta la ruta si es necesario
 
     - name: Upload test.txt artifact
       uses: actions/upload-artifact@v3
