@@ -34,4 +34,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-file
-          path: ./GitHubActionsTests/test.txt
+          path: '**/test.txt'
+
