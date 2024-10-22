@@ -1,37 +1,23 @@
-name: Build and Upload Artifact with environment
+name: Environment Variable Demo
 
 on: push
 
 jobs:
-  build:
-    runs-on: windows-latest
+  demo:
+    runs-on: ubuntu-latest  # Puedes usar windows-latest también si lo prefieres
 
     steps:
       # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Setup .NET Core SDK
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.x' # Cambia la versión si es necesario
+      # Echo the GITHUB_WORKSPACE environment variable
+      - name: Show GITHUB_WORKSPACE path
+        run: echo "The workspace directory is $GITHUB_WORKSPACE"
 
-      # Restore dependencies (if any)
-      - name: Restore dependencies
-        run: dotnet restore ./GitHubActionsTests/GitHubActionsTests.csproj
-
-      # Build the project
-      - name: Build the project
-        run: dotnet build --no-restore ./GitHubActionsTests/GitHubActionsTests.csproj
-
-      # Run the project (this creates the test.txt file)
-      - name: Run the project
-        run: dotnet run --project ./GitHubActionsTests/GitHubActionsTests.csproj
-
-      # Upload the test.txt as an artifact
-      - name: Upload test.txt as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-file
-          path: ${{ env.GITHUB_WORKSPACE }}/GitHubActionsTests/test.txt
+      # Another example with more variables
+      - name: Show some default environment variables
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Run number: $GITHUB_RUN_NUMBER"
+          echo "Actor (who triggered the workflow): $GITHUB_ACTOR"
