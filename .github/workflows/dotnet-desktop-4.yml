@@ -1,9 +1,6 @@
 name: Build and Upload txt File
 
-on:
-  push:
-    branches:
-      - main  # Cambia esto a la rama donde quieras que se ejecute el workflow
+on: push
 
 jobs:
   build:
