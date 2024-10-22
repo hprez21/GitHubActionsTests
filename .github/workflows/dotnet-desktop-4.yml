@@ -1,31 +1,36 @@
-name: .NET CI 3
+name: Build and Create Text File
+
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
     - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: '8.0.x'
+    
     - name: Restore dependencies
       run: dotnet restore
-    - name: Publish
-      run: dotnet publish GitHubActionsTests/GitHubActionsTests.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true -o ./publish
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Upload executable artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: GitHubActionsTests
-        path: ./publish/*.exe
+    
+    - name: Build
+      run: dotnet build --no-restore
+    
+    - name: Run application
+      run: dotnet run --no-build
+    
     - name: Upload text file artifact
       uses: actions/upload-artifact@v3
       with:
-        name: TestFile
-        path: ./publish/test.txt
+        name: generated-text-file
+        path: test.txt
+        if-no-files-found: error
