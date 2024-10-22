@@ -7,31 +7,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # Descarga el código del repositorio
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Instala el SDK de .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.x' # Cambia esto a la versión de .NET que estés usando
 
-    # Restaura dependencias de .NET (en caso de que haya)
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore MyApp/MyApp.csproj  # Ajusta la ruta si es necesario
 
-    # Construye el proyecto
     - name: Build the project
-      run: dotnet build --no-restore
+      run: dotnet build MyApp/MyApp.csproj --no-restore  # Ajusta la ruta si es necesario
 
-    # Ejecuta el programa para generar el archivo test.txt
     - name: Run the console app
-      run: dotnet run
+      run: dotnet run --project MyApp/MyApp.csproj  # Ajusta la ruta si es necesario
 
-    # Sube el archivo test.txt como un artefacto
     - name: Upload test.txt artifact
       uses: actions/upload-artifact@v3
       with:
         name: test-txt-file
-        path: test.txt
+        path: MyApp/test.txt  # Ajusta la ruta si es necesario
