@@ -1,6 +1,10 @@
 name: .NET Build with Cache
 
-on: push
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -13,23 +17,28 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-        
-    # Determinar la ubicación del caché de NuGet según el SO
-    - name: Get NuGet packages cache path
-      id: nuget-cache
-      run: |
-        echo "NUGET_PACKAGES=${NUGET_PACKAGES:-$HOME/.nuget/packages}" >> $GITHUB_ENV
-        
+
+    # Primero intentamos restaurar el caché
     - name: Cache NuGet packages
       uses: actions/cache@v3
+      id: cache-nuget
       with:
-        path: ${{ env.NUGET_PACKAGES }}
+        path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
     
-    - name: Install dependencies
+    # Luego restauramos las dependencias (esto creará los paquetes si no estaban en caché)
+    - name: Restore dependencies
       run: dotnet restore
+      
+    # Creamos el directorio explícitamente si no existe
+    - name: Ensure NuGet packages directory exists
+      run: mkdir -p ~/.nuget/packages
       
     - name: Build
       run: dotnet build --no-restore
+
+    # Listamos el contenido para debug
+    - name: List NuGet packages directory
+      run: ls -la ~/.nuget/packages
