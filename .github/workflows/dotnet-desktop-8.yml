@@ -1,6 +1,10 @@
 name: .NET Build with Cache
 
-on: push
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,13 +18,16 @@ jobs:
       with:
         dotnet-version: 8.0.x
         
+    # Determinar la ubicación del caché de NuGet según el SO
+    - name: Get NuGet packages cache path
+      id: nuget-cache
+      run: |
+        echo "NUGET_PACKAGES=${NUGET_PACKAGES:-$HOME/.nuget/packages}" >> $GITHUB_ENV
+        
     - name: Cache NuGet packages
       uses: actions/cache@v3
       with:
-        path: | 
-          ~/.nuget/packages
-          !~/.nuget/packages/microsoft.netcore.app.*/**
-          !~/.nuget/packages/microsoft.aspnetcore.app.*/**
+        path: ${{ env.NUGET_PACKAGES }}
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
