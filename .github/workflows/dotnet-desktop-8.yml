@@ -17,12 +17,15 @@ jobs:
     - name: Cache NuGet packages
       uses: actions/cache@v3
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/Project.Assets.json', '**/*.csproj') }}
+        path: | 
+          ~/.nuget/packages
+          !~/.nuget/packages/microsoft.netcore.app.*/**
+          !~/.nuget/packages/microsoft.aspnetcore.app.*/**
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
     
-    - name: Restore dependencies
+    - name: Install dependencies
       run: dotnet restore
       
     - name: Build
