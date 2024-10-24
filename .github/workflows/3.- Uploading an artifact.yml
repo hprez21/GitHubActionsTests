@@ -1,4 +1,4 @@
-name: .NET CI 3
+name: 3.- Uploading an artifact
 on:
   push:
     branches: [ "master" ]
