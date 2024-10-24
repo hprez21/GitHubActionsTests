@@ -1,5 +1,4 @@
-name: Build and Upload Artifact
-
+name: 4.- Uploading an artifact 2
 on: push
 
 jobs:
