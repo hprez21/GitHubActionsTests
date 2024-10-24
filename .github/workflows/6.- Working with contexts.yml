@@ -1,4 +1,4 @@
-name: Context Variables Demo
+name: 6.- Working with contexts
 on: push
 
 jobs:
