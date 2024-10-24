@@ -1,4 +1,4 @@
-name: Custom Variables Demo
+name: 7.- Working with custom variables
 on: push
 
 jobs:
