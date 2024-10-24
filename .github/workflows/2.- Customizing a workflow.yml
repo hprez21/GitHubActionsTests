@@ -1,4 +1,4 @@
-name: .NET CI 2
+name: 2.- Customizing a workflow
 
 on:
   push:
