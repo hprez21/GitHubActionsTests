@@ -1,4 +1,4 @@
-name: .NET CI 1
+name: 1.- Demo - Build a .NET desktop app
 
 on:
   push:
